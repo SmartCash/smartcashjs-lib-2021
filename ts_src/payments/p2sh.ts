@@ -6,7 +6,7 @@ import * as lazy from './lazy';
 const typef = require('typeforce');
 const OPS = bscript.OPS;
 
-const bs58check = require('../../smartcash/bs58smartcheck');
+const bs58check = require('./../../src/smartcash/bs58smartcheck/index.js');
 
 function stacksEqual(a: Buffer[], b: Buffer[]): boolean {
     if (a.length !== b.length) return false;

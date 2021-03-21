@@ -6,7 +6,7 @@ const bscript = require('../script');
 const lazy = require('./lazy');
 const typef = require('typeforce');
 const OPS = bscript.OPS;
-const bs58check = require('../../smartcash/bs58smartcheck');
+const bs58check = require('./../smartcash/bs58smartcheck/index');
 function stacksEqual(a, b) {
   if (a.length !== b.length) return false;
   return a.every((x, i) => {
