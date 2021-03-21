@@ -1,4 +1,5 @@
 'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
 
 var base58 = require('bs58');
 var sha3 = require('js-sha3').keccak256;

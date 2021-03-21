@@ -1,3 +1,6 @@
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+
 var bs58smartcheck = require('../bs58smartcheck');
 
 function decodeRaw(buffer, version) {
