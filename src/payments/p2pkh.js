@@ -7,7 +7,7 @@ const lazy = require('./lazy');
 const typef = require('typeforce');
 const OPS = bscript.OPS;
 const ecc = require('tiny-secp256k1');
-const bs58check = require('bs58check');
+const bs58check = require('bs58smartcheck');
 // input: {signature} {pubkey}
 // output: OP_DUP OP_HASH160 {hash160(pubkey)} OP_EQUALVERIFY OP_CHECKSIG
 function p2pkh(a, opts) {

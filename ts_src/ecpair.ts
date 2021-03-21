@@ -4,7 +4,7 @@ import * as types from './types';
 const ecc = require('tiny-secp256k1');
 const randomBytes = require('randombytes');
 const typeforce = require('typeforce');
-const wif = require('wif');
+const wif = require('wif-smart');
 
 const isOptions = typeforce.maybe(
   typeforce.compile({

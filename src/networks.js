@@ -1,35 +1,32 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.bitcoin = {
-  messagePrefix: '\x18Bitcoin Signed Message:\n',
-  bech32: 'bc',
+  messagePrefix: '\x18SmartCash Signed Message:\n',
   bip32: {
     public: 0x0488b21e,
     private: 0x0488ade4,
   },
-  pubKeyHash: 0x00,
-  scriptHash: 0x05,
-  wif: 0x80,
+  pubKeyHash: 0x3f,
+  scriptHash: 0x12,
+  wif: 0xbf,
 };
 exports.regtest = {
-  messagePrefix: '\x18Bitcoin Signed Message:\n',
-  bech32: 'bcrt',
+  messagePrefix: '\x18SmartCash Signed Message:\n',
   bip32: {
-    public: 0x043587cf,
-    private: 0x04358394,
+    public: 0x0488b21e,
+    private: 0x0488ade4,
   },
-  pubKeyHash: 0x6f,
-  scriptHash: 0xc4,
-  wif: 0xef,
+  pubKeyHash: 0x3f,
+  scriptHash: 0x12,
+  wif: 0xbf,
 };
 exports.testnet = {
-  messagePrefix: '\x18Bitcoin Signed Message:\n',
-  bech32: 'tb',
+  messagePrefix: '\x18SmartCash Signed Message:\n',
   bip32: {
-    public: 0x043587cf,
-    private: 0x04358394,
+    public: 0x0488b21e,
+    private: 0x0488ade4,
   },
-  pubKeyHash: 0x6f,
-  scriptHash: 0xc4,
-  wif: 0xef,
+  pubKeyHash: 0x3f,
+  scriptHash: 0x12,
+  wif: 0xbf,
 };

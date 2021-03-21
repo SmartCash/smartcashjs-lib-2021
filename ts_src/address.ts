@@ -5,7 +5,7 @@ import * as bscript from './script';
 import * as types from './types';
 
 const { bech32, bech32m } = require('bech32');
-const bs58check = require('bs58check');
+const bs58check = require('bs58smartcheck');
 const typeforce = require('typeforce');
 
 export interface Base58CheckResult {
