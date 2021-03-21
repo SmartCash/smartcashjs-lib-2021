@@ -5,7 +5,7 @@ const types = require('./types');
 const ecc = require('tiny-secp256k1');
 const randomBytes = require('randombytes');
 const typeforce = require('typeforce');
-const wif = require('wif-smart');
+const wif = require('../smartcash/wif');
 const isOptions = typeforce.maybe(
   typeforce.compile({
     compressed: types.maybe(types.Boolean),

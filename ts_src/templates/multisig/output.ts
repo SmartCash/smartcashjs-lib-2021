@@ -6,28 +6,25 @@ import { OPS } from '../../script';
 import * as types from '../../types';
 const OP_INT_BASE = OPS.OP_RESERVED; // OP_1 - 1
 
-export function check(
-  script: Buffer | Stack,
-  allowIncomplete?: boolean,
-): boolean {
-  const chunks = bscript.decompile(script) as Stack;
+export function check(script: Buffer | Stack, allowIncomplete?: boolean): boolean {
+    const chunks = bscript.decompile(script) as Stack;
 
-  if (chunks.length < 4) return false;
-  if (chunks[chunks.length - 1] !== OPS.OP_CHECKMULTISIG) return false;
-  if (!types.Number(chunks[0])) return false;
-  if (!types.Number(chunks[chunks.length - 2])) return false;
-  const m = (chunks[0] as number) - OP_INT_BASE;
-  const n = (chunks[chunks.length - 2] as number) - OP_INT_BASE;
+    if (chunks.length < 4) return false;
+    if (chunks[chunks.length - 1] !== OPS.OP_CHECKMULTISIG) return false;
+    if (!types.Number(chunks[0])) return false;
+    if (!types.Number(chunks[chunks.length - 2])) return false;
+    const m = (chunks[0] as number) - OP_INT_BASE;
+    const n = (chunks[chunks.length - 2] as number) - OP_INT_BASE;
 
-  if (m <= 0) return false;
-  if (n > 16) return false;
-  if (m > n) return false;
-  if (n !== chunks.length - 3) return false;
-  if (allowIncomplete) return true;
+    if (m <= 0) return false;
+    if (n > 16) return false;
+    if (m > n) return false;
+    if (n !== chunks.length - 3) return false;
+    if (allowIncomplete) return true;
 
-  const keys = chunks.slice(1, -2) as Buffer[];
-  return keys.every(bscript.isCanonicalPubKey);
+    const keys = chunks.slice(1, -2) as Buffer[];
+    return keys.every(bscript.isCanonicalPubKey);
 }
 check.toJSON = (): string => {
-  return 'multi-sig output';
+    return 'multi-sig output';
 };
