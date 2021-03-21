@@ -5,10 +5,10 @@ import { regtestUtils } from './_regtest';
 const dhttp = regtestUtils.dhttp;
 const TESTNET = bitcoin.networks.testnet;
 
-describe('bitcoinjs-lib (addresses)', () => {
+describe('smartcashjs-lib (addresses)', () => {
   it(
     'can generate a random address [and support the retrieval of ' +
-      'transactions for that address (via 3PBP)]',
+    'transactions for that address (via 3PBP)]',
     async () => {
       const keyPair = bitcoin.ECPair.makeRandom();
       const { address } = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey });
@@ -117,7 +117,7 @@ describe('bitcoinjs-lib (addresses)', () => {
   });
 
   it('can generate a Litecoin address', () => {
-    // WARNING: although possible, bitcoinjs is NOT necessarily compatible with Litecoin
+    // WARNING: although possible, smartcashjs is NOT necessarily compatible with Litecoin
     const LITECOIN = {
       messagePrefix: '\x19Litecoin Signed Message:\n',
       bech32: 'ltc',

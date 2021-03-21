@@ -32,7 +32,7 @@ const dave = bitcoin.ECPair.fromWIF(
   regtest,
 );
 
-describe('bitcoinjs-lib (transactions w/ CSV)', () => {
+describe('smartcashjs-lib (transactions w/ CSV)', () => {
   // force update MTP
   before(async () => {
     await regtestUtils.mine(11);
@@ -74,7 +74,7 @@ describe('bitcoinjs-lib (transactions w/ CSV)', () => {
   /* tslint:disable-next-line */
   // Ref: https://github.com/bitcoinbook/bitcoinbook/blob/f8b883dcd4e3d1b9adf40fed59b7e898fbd9241f/ch07.asciidoc#complex-script-example
 
-  // Note: bitcoinjs-lib will not offer specific support for problems with
+  // Note: smartcashjs-lib will not offer specific support for problems with
   //       advanced script usages such as below. Use at your own risk.
   function complexCsvOutput(
     _alice: KeyPair,
@@ -118,7 +118,7 @@ describe('bitcoinjs-lib (transactions w/ CSV)', () => {
   // expiry will pass, {Alice's signature} OP_TRUE
   it(
     'can create (and broadcast via 3PBP) a Transaction where Alice can redeem ' +
-      'the output after the expiry (in the future) (simple CHECKSEQUENCEVERIFY)',
+    'the output after the expiry (in the future) (simple CHECKSEQUENCEVERIFY)',
     async () => {
       // 5 blocks from now
       const sequence = bip68.encode({ blocks: 5 });
@@ -173,7 +173,7 @@ describe('bitcoinjs-lib (transactions w/ CSV)', () => {
   // expiry in the future, {Alice's signature} OP_TRUE
   it(
     'can create (but fail to broadcast via 3PBP) a Transaction where Alice ' +
-      'attempts to redeem before the expiry (simple CHECKSEQUENCEVERIFY)',
+    'attempts to redeem before the expiry (simple CHECKSEQUENCEVERIFY)',
     async () => {
       // two hours after confirmation
       const sequence = bip68.encode({ seconds: 7168 });
@@ -226,7 +226,7 @@ describe('bitcoinjs-lib (transactions w/ CSV)', () => {
   // Check first combination of complex CSV, 2 of 3
   it(
     'can create (and broadcast via 3PBP) a Transaction where Bob and Charles ' +
-      'can send (complex CHECKSEQUENCEVERIFY)',
+    'can send (complex CHECKSEQUENCEVERIFY)',
     async () => {
       // 2 blocks from now
       const sequence1 = bip68.encode({ blocks: 2 });
@@ -293,7 +293,7 @@ describe('bitcoinjs-lib (transactions w/ CSV)', () => {
   // Check first combination of complex CSV, mediator + 1 of 3 after 2 blocks
   it(
     'can create (and broadcast via 3PBP) a Transaction where Alice (mediator) ' +
-      'and Bob can send after 2 blocks (complex CHECKSEQUENCEVERIFY)',
+    'and Bob can send after 2 blocks (complex CHECKSEQUENCEVERIFY)',
     async () => {
       // 2 blocks from now
       const sequence1 = bip68.encode({ blocks: 2 });
@@ -363,7 +363,7 @@ describe('bitcoinjs-lib (transactions w/ CSV)', () => {
   // Check first combination of complex CSV, mediator after 5 blocks
   it(
     'can create (and broadcast via 3PBP) a Transaction where Alice (mediator) ' +
-      'can send after 5 blocks (complex CHECKSEQUENCEVERIFY)',
+    'can send after 5 blocks (complex CHECKSEQUENCEVERIFY)',
     async () => {
       // 2 blocks from now
       const sequence1 = bip68.encode({ blocks: 2 });

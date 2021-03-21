@@ -121,14 +121,14 @@ __fixed__
 
 # 4.0.0
 __added__
-- Added [`bip32`](https://github.com/bitcoinjs/bip32) dependency as a primary export (#1073)
+- Added [`bip32`](https://github.com/smartcashjs/bip32) dependency as a primary export (#1073)
 - Added `ECPair.fromPrivateKey` (#1070)
 - Added `payments` export, with support for `p2pkh`, `p2pk`, `p2ms`, `p2sh`, `p2wpkh`, `p2wsh` and `embed` payment types (#1096, #1119)
 - Added `script.signature.encode/decode` for script signatures (#459)
 
 __changed__
 - `ECPair.prototype.sign` now returns a 64-byte signature `Buffer`, not an `ECSignature` object (#1084)
-- `ECPair` (and all ECDSA code) now uses [`tiny-secp256k1`](https://github.com/bitcoinjs/tiny-secp256k1), which uses the [`libsecp256k1` library](https://github.com/bitcoin-core/secp256k1) (#1070)
+- `ECPair` (and all ECDSA code) now uses [`tiny-secp256k1`](https://github.com/smartcashjs/tiny-secp256k1), which uses the [`libsecp256k1` library](https://github.com/bitcoin-core/secp256k1) (#1070)
 - `TransactionBuilder` internal variables are now `__` prefixed to discourage public usage (#1038)
 - `TransactionBuilder` now defaults to version 2 transaction versions (#1036)
 - `script.decompile` now returns `[Buffer]` or `null`, if decompilation failed (#1039)
@@ -205,7 +205,7 @@ __removed__
 - Removed `buffer-equals`/`buffer-compare` dependencies (#650)
 - Removed `HDNode.prototype.toString` (#665)
 - Removed `dogecoin` network (#675)
-- Removed `message` export, moved to [`bitcoinjs-message`](https://github.com/bitcoinjs/bitcoinjs-message) (#456)
+- Removed `message` export, moved to [`smartcashjs-message`](https://github.com/smartcashjs/smartcashjs-message) (#456)
 
 __renamed__
 - Removed `script.*` functions in favour of `bitcoin.script.*.(input/output).(encode/decode/check)` style (#682)
@@ -281,7 +281,7 @@ __added__
 
 
 # 2.0.0
-In this release we have strived to simplify the API,  [using native types](https://github.com/bitcoinjs/bitcoinjs-lib/issues/407) wherevever possible to encourage cross-compatibility with other open source community modules.
+In this release we have strived to simplify the API,  [using native types](https://github.com/smartcashjs/smartcashjs-lib/issues/407) wherevever possible to encourage cross-compatibility with other open source community modules.
 
 The `ecdsa` module has been removed in lieu of using a new ECDSA module (for performance and safety reasons) during the `2.x.y` major release.
 Several other cumbersome modules have been removed,  with their new independent modules recommended for usage instead for greater modularity in your projects.
@@ -291,8 +291,8 @@ Several other cumbersome modules have been removed,  with their new independent 
 Backward incompatible changes:
 
 __added__
-- export `address`, for `address` based [utility functions](https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/src/address.js), most compatible, just without `Address` instantiation, see #401, #444
-- export `script`, for `script` based [utility functions](https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/src/script.js), mostly compatible, just without `Script` instantiation, see #438, #444
+- export `address`, for `address` based [utility functions](https://github.com/smartcashjs/smartcashjs-lib/blob/master/src/address.js), most compatible, just without `Address` instantiation, see #401, #444
+- export `script`, for `script` based [utility functions](https://github.com/smartcashjs/smartcashjs-lib/blob/master/src/script.js), mostly compatible, just without `Script` instantiation, see #438, #444
 - export `ECPair`, a merged replacement for `ECKey`/`ECPubKey`, invalid types will throw via `typeforce`
 
 __changed__
@@ -311,7 +311,7 @@ __changed__
 
 __removed__
 - export `Address`, `strings` are now used,  benchwith no performance loss for most use cases
-- export `base58check`, use [`bs58check`](https://github.com/bitcoinjs/bs58check) instead
+- export `base58check`, use [`bs58check`](https://github.com/smartcashjs/bs58check) instead
 - export `ecdsa`, use [`ecurve`](https://github.com/cryptocoinjs/ecurve) instead
 - export `ECKey`, use new export `ECPair` instead
 - export `ECPubKey`, use new export `ECPair` instead
@@ -330,7 +330,7 @@ __removed__
 - `HDNode.toBuffer`, use `HDNode.prototype.toBase58` instead
 - `HDNode.toHex`, use `HDNode.prototype.toBase58` instead
 
-- `networks.*.magic`, see the comment [here](https://github.com/bitcoinjs/bitcoinjs-lib/pull/432/files#r36715792)
+- `networks.*.magic`, see the comment [here](https://github.com/smartcashjs/smartcashjs-lib/pull/432/files#r36715792)
 - `networks.[viacoin|viacointestnet|gamerscoin|jumbucks|zetacoin]`, import these yourself (see #383/a0e6ee7)
 - `networks.*.estimateFee`, out-dated
 

@@ -8,7 +8,7 @@ const regtest = regtestUtils.network;
 
 // See bottom of file for some helper functions used to make the payment objects needed.
 
-describe('bitcoinjs-lib (transactions with psbt)', () => {
+describe('smartcashjs-lib (transactions with psbt)', () => {
   it('can create a 1-to-1 Transaction', () => {
     const alice = bitcoin.ECPair.fromWIF(
       'L2uPYXe17xSTqbCjZvL2DsyXPCbXspvcu5mHLDYUgzdUbZGSKrSr',
@@ -25,18 +25,18 @@ describe('bitcoinjs-lib (transactions with psbt)', () => {
       // non-segwit inputs now require passing the whole previous tx as Buffer
       nonWitnessUtxo: Buffer.from(
         '0200000001f9f34e95b9d5c8abcd20fc5bd4a825d1517be62f0f775e5f36da944d9' +
-          '452e550000000006b483045022100c86e9a111afc90f64b4904bd609e9eaed80d48' +
-          'ca17c162b1aca0a788ac3526f002207bb79b60d4fc6526329bf18a77135dc566020' +
-          '9e761da46e1c2f1152ec013215801210211755115eabf846720f5cb18f248666fec' +
-          '631e5e1e66009ce3710ceea5b1ad13ffffffff01' +
-          // value in satoshis (Int64LE) = 0x015f90 = 90000
-          '905f010000000000' +
-          // scriptPubkey length
-          '19' +
-          // scriptPubkey
-          '76a9148bbc95d2709c71607c60ee3f097c1217482f518d88ac' +
-          // locktime
-          '00000000',
+        '452e550000000006b483045022100c86e9a111afc90f64b4904bd609e9eaed80d48' +
+        'ca17c162b1aca0a788ac3526f002207bb79b60d4fc6526329bf18a77135dc566020' +
+        '9e761da46e1c2f1152ec013215801210211755115eabf846720f5cb18f248666fec' +
+        '631e5e1e66009ce3710ceea5b1ad13ffffffff01' +
+        // value in satoshis (Int64LE) = 0x015f90 = 90000
+        '905f010000000000' +
+        // scriptPubkey length
+        '19' +
+        // scriptPubkey
+        '76a9148bbc95d2709c71607c60ee3f097c1217482f518d88ac' +
+        // locktime
+        '00000000',
         'hex',
       ),
 
@@ -64,11 +64,11 @@ describe('bitcoinjs-lib (transactions with psbt)', () => {
     assert.strictEqual(
       psbt.extractTransaction().toHex(),
       '02000000013ebc8203037dda39d482bf41ff3be955996c50d9d4f7cfc3d2097a694a7' +
-        'b067d000000006b483045022100931b6db94aed25d5486884d83fc37160f37f3368c0' +
-        'd7f48c757112abefec983802205fda64cff98c849577026eb2ce916a50ea70626a766' +
-        '9f8596dd89b720a26b4d501210365db9da3f8a260078a7e8f8b708a1161468fb2323f' +
-        'fda5ec16b261ec1056f455ffffffff0180380100000000001976a914ca0d36044e0dc' +
-        '08a22724efa6f6a07b0ec4c79aa88ac00000000',
+      'b067d000000006b483045022100931b6db94aed25d5486884d83fc37160f37f3368c0' +
+      'd7f48c757112abefec983802205fda64cff98c849577026eb2ce916a50ea70626a766' +
+      '9f8596dd89b720a26b4d501210365db9da3f8a260078a7e8f8b708a1161468fb2323f' +
+      'fda5ec16b261ec1056f455ffffffff0180380100000000001976a914ca0d36044e0dc' +
+      '08a22724efa6f6a07b0ec4c79aa88ac00000000',
     );
   });
 
@@ -156,7 +156,7 @@ describe('bitcoinjs-lib (transactions with psbt)', () => {
 
     // build and broadcast our RegTest network
     await regtestUtils.broadcast(psbt.extractTransaction().toHex());
-    // to build and broadcast to the actual Bitcoin network, see https://github.com/bitcoinjs/bitcoinjs-lib/issues/839
+    // to build and broadcast to the actual Bitcoin network, see https://github.com/smartcashjs/smartcashjs-lib/issues/839
   });
 
   it('can create (and broadcast via 3PBP) a Transaction with an OP_RETURN output', async () => {
@@ -168,7 +168,7 @@ describe('bitcoinjs-lib (transactions with psbt)', () => {
       'noredeem',
     );
 
-    const data = Buffer.from('bitcoinjs-lib', 'utf8');
+    const data = Buffer.from('smartcashjs-lib', 'utf8');
     const embed = bitcoin.payments.embed({ data: [data] });
 
     const psbt = new bitcoin.Psbt({ network: regtest })
@@ -439,7 +439,7 @@ describe('bitcoinjs-lib (transactions with psbt)', () => {
 
   it(
     'can create (and broadcast via 3PBP) a Transaction, w/ a ' +
-      'P2SH(P2WSH(P2MS(3 of 4))) (SegWit multisig) input',
+    'P2SH(P2WSH(P2MS(3 of 4))) (SegWit multisig) input',
     async () => {
       const p2sh = createPayment('p2sh-p2wsh-p2ms(3 of 4)');
       const inputData = await getInputData(
@@ -498,7 +498,7 @@ describe('bitcoinjs-lib (transactions with psbt)', () => {
 
   it(
     'can create (and broadcast via 3PBP) a Transaction, w/ a ' +
-      'P2SH(P2WSH(P2MS(3 of 4))) (SegWit multisig) input with nonWitnessUtxo',
+    'P2SH(P2WSH(P2MS(3 of 4))) (SegWit multisig) input with nonWitnessUtxo',
     async () => {
       // For learning purposes, ignore this test.
       // REPEATING ABOVE BUT WITH nonWitnessUtxo by passing false to getInputData
@@ -532,7 +532,7 @@ describe('bitcoinjs-lib (transactions with psbt)', () => {
 
   it(
     'can create (and broadcast via 3PBP) a Transaction, w/ a ' +
-      'P2SH(P2MS(2 of 2)) input with nonWitnessUtxo',
+    'P2SH(P2MS(2 of 2)) input with nonWitnessUtxo',
     async () => {
       const myKey = bitcoin.ECPair.makeRandom({ network: regtest });
       const myKeys = [

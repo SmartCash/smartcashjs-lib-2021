@@ -1,5 +1,5 @@
 {
-  "name": "bitcoinjs-lib",
+  "name": "smartcashjs-lib",
   "version": "5.2.0",
   "description": "Client-side Bitcoin JavaScript library",
   "main": "./src/index.js",
@@ -8,11 +8,11 @@
     "node": ">=8.0.0"
   },
   "keywords": [
-    "bitcoinjs",
+    "smartcashjs",
     "bitcoin",
     "browserify",
     "javascript",
-    "bitcoinjs"
+    "smartcashjs"
   ],
   "scripts": {
     "build": "npm run clean && tsc -p ./tsconfig.json && npm run formatjs",
@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bitcoinjs/bitcoinjs-lib.git"
+    "url": "https://github.com/SmartCash/smartcashjs-lib-2021.git"
   },
   "files": [
     "src",

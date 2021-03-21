@@ -16,7 +16,7 @@ const transaction_1 = require('./transaction');
  */
 const DEFAULT_OPTS = {
   /**
-   * A bitcoinjs Network object. This is only used if you pass an `address`
+   * A smartcashjs Network object. This is only used if you pass an `address`
    * parameter to addOutput. Otherwise it is not needed and can be left default.
    */
   network: networks_1.bitcoin,
@@ -614,7 +614,7 @@ exports.Psbt = Psbt;
 const transactionFromBuffer = buffer => new PsbtTransaction(buffer);
 /**
  * This class implements the Transaction interface from bip174 library.
- * It contains a bitcoinjs-lib Transaction object.
+ * It contains a smartcashjs-lib Transaction object.
  */
 class PsbtTransaction {
   constructor(buffer = Buffer.from([2, 0, 0, 0, 0, 0, 0, 0, 0, 0])) {

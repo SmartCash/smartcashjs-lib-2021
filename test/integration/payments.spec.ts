@@ -58,7 +58,7 @@ async function buildAndSign(
   const { output } = fn(base);
   if (!output) throw new TypeError('Missing output');
 
-  describe('bitcoinjs-lib (payments - ' + k + ')', () => {
+  describe('smartcashjs-lib (payments - ' + k + ')', () => {
     it('can broadcast as an output, and be spent as an input', async () => {
       Object.assign(depends, { prevOutScriptType: k });
       await buildAndSign(depends, output, undefined, undefined);
@@ -66,8 +66,8 @@ async function buildAndSign(
 
     it(
       'can (as P2SH(' +
-        k +
-        ')) broadcast as an output, and be spent as an input',
+      k +
+      ')) broadcast as an output, and be spent as an input',
       async () => {
         const p2sh = bitcoin.payments.p2sh({
           redeem: { output },
@@ -88,8 +88,8 @@ async function buildAndSign(
 
     it(
       'can (as P2WSH(' +
-        k +
-        ')) broadcast as an output, and be spent as an input',
+      k +
+      ')) broadcast as an output, and be spent as an input',
       async () => {
         const p2wsh = bitcoin.payments.p2wsh({
           redeem: { output },
@@ -107,8 +107,8 @@ async function buildAndSign(
 
     it(
       'can (as P2SH(P2WSH(' +
-        k +
-        '))) broadcast as an output, and be spent as an input',
+      k +
+      '))) broadcast as an output, and be spent as an input',
       async () => {
         const p2wsh = bitcoin.payments.p2wsh({
           redeem: { output },
