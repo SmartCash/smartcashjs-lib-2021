@@ -192,7 +192,7 @@ async function createAndSendRawTransaction({
             unspentList.utxos.forEach((element) => {
                 const fullTxHex = await getTxId(element.txid);
 
-                psbt.addInput({ hash: element.txid, index: element.index, nonWitnessUtxo: fullTxHex.hex });
+                psbt.addInput({ hash: element.txid, index: element.index, nonWitnessUtxo: Buffer.from(fullTxHex.hex, 'hex') });
             });
 
             for (let i = 0; i < unspentList.utxos.length; i += 1) {
