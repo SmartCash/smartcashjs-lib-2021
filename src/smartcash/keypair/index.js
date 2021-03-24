@@ -2,7 +2,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const { smartcash: smartMainNetwork } = require('./../../networks');
-
+const { ECPair, payments } = require('./../../index');
 function getAddressFromWIF(privateKey) {
     let keyPair = ECPair.fromWIF(privateKey);
     const { address } = payments.p2pkh({ pubkey: keyPair.publicKey });
