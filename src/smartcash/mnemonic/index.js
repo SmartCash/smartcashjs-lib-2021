@@ -61,16 +61,6 @@ function getAddressesFromDerived({ start = 0, total = 10, extendedKey, derivatio
     return addresses;
 }
 
-function getAddress(privateKey) {
-    let keyPair = ECPair.fromWIF(privateKey);
-    const { address } = payments.p2pkh({ pubkey: keyPair.publicKey });
-    return address;
-}
-
-function getAddressP2pkh(node, network) {
-    return payments.p2pkh({ pubkey: node.publicKey, network }).address;
-}
-
 function calcAddressesFromDerived({
     index,
     useHardenedAddresses = false,

@@ -3,11 +3,14 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const { sumFloats } = require('./../satoshi/math');
 
-const CryptoJS = require('crypto-js');
-const crypto = require('crypto');
+const cryptoAES = require('crypto-js');
+const cryptoRSA = require('crypto');
 const smartCash = require('./../../index');
 const request = require('request-promise');
 const _ = require('lodash');
+
+const { getAddressFromKeyPair, getAddressFromWIF } = require('./../keypair');
+
 const LOCKED = 'pubkeyhashlocked';
 //const OP_RETURN_DEFAULT = 'Sent from SmartHub.';
 const MIN_FEE = 0.001;
@@ -129,14 +132,14 @@ async function createAndSendRawTransaction({
     }
 
     try {
-        const decryptedWallet = CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt(privateKey, password));
+        const decryptedWallet = cryptoAES.enc.Utf8.stringify(cryptoAES.AES.decrypt(privateKey, password));
         let decriptKey;
 
         if (!decryptedWallet) decriptKey = privateKey;
         else decriptKey = decryptedWallet;
 
         let key = smartCash.ECPair.fromWIF(decriptKey);
-        let fromAddress = key.getAddress().toString();
+        let fromAddress = getAddressFromKeyPair(key);
         let transaction = new smartCash.TransactionBuilder();
         let change = unlockedBalance - amount - fee;
         transaction.setLockTime(unspentList.blockHeight);
@@ -232,16 +235,11 @@ function cltvBasicTemplate(ecPair, lockTime) {
     );
 }
 
-function getAddress(privateKey) {
-    let keyPair = smartCash.ECPair.fromWIF(privateKey);
-    const { address } = smartCash.payments.p2pkh({ pubkey: keyPair.publicKey });
-    return address;
-}
-
 function createNewWalletKeyPair() {
-    let keyPair = smartCash.ECPair.makeRandom();
+    const keyPair = smartCash.ECPair.makeRandom();
+    const { address } = smartCash.payments.p2pkh({ pubkey: keyPair.publicKey });
     let key = keyPair.toWIF();
-    let address = getAddress(key);
+
     return {
         privateKey: key,
         address: address,
@@ -249,7 +247,7 @@ function createNewWalletKeyPair() {
 }
 
 function createRSAKeyPair(password) {
-    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+    const { publicKey, privateKey } = cryptoRSA.generateKeyPairSync('rsa', {
         modulusLength: 2048,
         publicKeyEncoding: {
             type: 'spki',
@@ -272,7 +270,7 @@ function createRSAKeyPair(password) {
 // We must encrypt a message with the receiver PUBLIC KEY so when this person receives it
 // They can decrypt with their Private Key
 function encryptTextWithRSAPublicKey(rsaReceiverPublicKey, message) {
-    var encMsg = crypto.publicEncrypt(rsaReceiverPublicKey, Buffer.from(message));
+    var encMsg = cryptoRSA.publicEncrypt(rsaReceiverPublicKey, Buffer.from(message));
     return encMsg.toString('base64');
 }
 
@@ -281,7 +279,7 @@ function decryptTextWithRSAPrivateKey(rsaPrivateKey, passphrase, encryptedMessag
         key: rsaPrivateKey,
         passphrase: passphrase,
     };
-    var decMsg = crypto.privateDecrypt(privateKeyWithPassphrase, Buffer.from(encryptedMessage, 'base64'));
+    var decMsg = cryptoRSA.privateDecrypt(privateKeyWithPassphrase, Buffer.from(encryptedMessage, 'base64'));
     return decMsg.toString('utf8');
 }
 
@@ -815,7 +813,7 @@ module.exports = {
     encryptTextWithRSAPublicKey: encryptTextWithRSAPublicKey,
     createRSAKeyPair: createRSAKeyPair,
     createNewWalletKeyPair: createNewWalletKeyPair,
-    getAddress: getAddress,
+    getAddress: getAddressFromWIF,
     createAndSendRawTransaction: createAndSendRawTransaction,
     GetSapiUrl: GetSapiUrl,
     getEnabledNodes: getEnabledNodes,
