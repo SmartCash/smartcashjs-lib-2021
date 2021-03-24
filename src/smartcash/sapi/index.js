@@ -189,7 +189,7 @@ async function createAndSendRawTransaction({
 
         //Add unspent and sign them all
         if (!_.isUndefined(unspentList.utxos) && unspentList.utxos.length > 0) {
-            unspentList.utxos.forEach((element) => {
+            unspentList.utxos.forEach(async (element) => {
                 const fullTxHex = await getTxId(element.txid);
 
                 psbt.addInput({ hash: element.txid, index: element.index, nonWitnessUtxo: Buffer.from(fullTxHex.hex, 'hex') });
