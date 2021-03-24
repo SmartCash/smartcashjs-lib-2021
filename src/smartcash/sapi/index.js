@@ -4,6 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const { sumFloats } = require('./../satoshi/math');
 
 const CryptoJS = require('crypto-js');
+const aes = require('./../aes')
 const smartCash = require('./../../index');
 const request = require('request-promise');
 const _ = require('lodash');
@@ -246,7 +247,7 @@ function createNewWalletKeyPair() {
 }
 
 function createRSAKeyPair(password) {
-    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+    const { publicKey, privateKey } = aes.generateKeyPairSync('rsa', {
         modulusLength: 2048,
         publicKeyEncoding: {
             type: 'spki',
@@ -269,7 +270,7 @@ function createRSAKeyPair(password) {
 // We must encrypt a message with the receiver PUBLIC KEY so when this person receives it
 // They can decrypt with their Private Key
 function encryptTextWithRSAPublicKey(rsaReceiverPublicKey, message) {
-    var encMsg = crypto.publicEncrypt(rsaReceiverPublicKey, Buffer.from(message));
+    var encMsg = aes.publicEncrypt(rsaReceiverPublicKey, Buffer.from(message));
     return encMsg.toString('base64');
 }
 
@@ -278,7 +279,7 @@ function decryptTextWithRSAPrivateKey(rsaPrivateKey, passphrase, encryptedMessag
         key: rsaPrivateKey,
         passphrase: passphrase,
     };
-    var decMsg = crypto.privateDecrypt(privateKeyWithPassphrase, Buffer.from(encryptedMessage, 'base64'));
+    var decMsg = aes.privateDecrypt(privateKeyWithPassphrase, Buffer.from(encryptedMessage, 'base64'));
     return decMsg.toString('utf8');
 }
 
