@@ -24,6 +24,7 @@ const bs58smartcheck = require('./smartcash/bs58smartcheck');
 exports.bs58smartcheck = bs58smartcheck;
 const math = require('./smartcash/satoshi/math');
 exports.math = math;
+exports.amount = require('./smartcash/amount');
 const wifi = require('./smartcash/wif');
 exports.wifi = wifi;
 const mnemonic = require('./smartcash/mnemonic');
