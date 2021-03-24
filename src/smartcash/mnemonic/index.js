@@ -1,30 +1,17 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const { bip32, ECPair, payments } = require('./../../index');
+const { bip32, ECPair } = require('./../../index');
 
 const Mnemonic = require('bitcore-mnemonic');
 const bitcoinjsBip38 = require('bip38');
-const NETWORK = {
-    messagePrefix: '\x18SmartCash Signed Message:\n',
-    bip32: {
-        public: 0x0488b21e,
-        private: 0x0488ade4,
-    },
-    pubKeyHash: 0x3f,
-    scriptHash: 0x12,
-    wif: 0xbf,
-};
-
-const BIP = {
-    BIP_32: 'BIP_32',
-    BIP_44: 'BIP_44',
-};
+const { getAddressFromKeyPair } = require('../keypair');
+const { smartcash: smartCashMainNetwork } = require('../../networks');
 
 function getBIP32HDKeyPair({ words, passphrase }) {
     var mnemonic = new Mnemonic(words);
     const seed = mnemonic.toSeed(passphrase);
-    const fromSeed = bip32.fromSeed(seed, NETWORK);
+    const fromSeed = bip32.fromSeed(seed, smartCashMainNetwork);
     return fromSeed;
 }
 
@@ -84,7 +71,7 @@ function calcAddressesFromDerived({
         keyPair = new ECPair(keyPair.d);
     }
     // get address
-    var address = getAddressP2pkh(keyPair, NETWORK);
+    var address = getAddressFromKeyPair(keyPair);
     // get privkey
     var hasPrivkey = !key.isNeutered();
     var privkey = 'NA';
