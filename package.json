@@ -62,7 +62,6 @@
         "js-sha3": "^0.8.0",
         "merkle-lib": "^2.0.10",
         "pushdata-bitcoin": "^1.0.1",
-        "random": "^3.0.3",
         "randombytes": "^2.0.1",
         "request": "^2.88.2",
         "request-promise": "^4.2.6",

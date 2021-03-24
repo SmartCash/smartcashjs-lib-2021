@@ -13,7 +13,9 @@ const LOCKED = 'pubkeyhashlocked';
 const MIN_FEE = 0.001;
 const MIN_AMOUNT_TO_SEND = 0.001;
 
-const random = require('random');
+function between(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 async function getEnabledNodes() {
     try {
@@ -30,7 +32,7 @@ async function getEnabledNodes() {
 
 async function GetSapiUrl() {
     const sapis = await getEnabledNodes();
-    const electedSapi = sapis[random.int(0, sapis.length - 1)];
+    const electedSapi = sapis[between(0, sapis.length - 1)];
     console.log(`electedSapi`, electedSapi);
     return electedSapi;
 }
