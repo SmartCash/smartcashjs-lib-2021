@@ -55,7 +55,7 @@ class TransactionBuilder {
         this.__PREV_TX_SET = {};
         this.__INPUTS = [];
         this.__TX = new transaction_1.Transaction();
-        this.__TX.version = 1;
+        this.__TX.version = 2;
         this.__USE_LOW_R = false;
         console.warn(
             'Deprecation Warning: TransactionBuilder will be removed in the future. ' +

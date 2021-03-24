@@ -142,7 +142,8 @@ async function createAndSendRawTransaction({
         let fromAddress = getAddressFromKeyPair(key);
         let transaction = new smartCash.TransactionBuilder();
         let change = unlockedBalance - amount - fee;
-        transaction.setLockTime(unspentList.blockHeight);
+        transaction.setVersion(2);
+        transaction.setLockTime(0);
 
         //SEND TO
         transaction.addOutput(toAddress, parseFloat(smartCash.amount(amount.toString()).toString()));
@@ -199,6 +200,9 @@ async function createAndSendRawTransaction({
         }
 
         let signedTransaction = transaction.build().toHex();
+
+        console.log(signedTransaction);
+
         let tx = await sendTransaction(signedTransaction, isChat);
 
         if (tx.status === 400) {
