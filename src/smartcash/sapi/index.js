@@ -194,7 +194,7 @@ async function createAndSendRawTransaction({
             });
 
             for (let i = 0; i < unspentList.utxos.length; i += 1) {
-                psbt.sign(i, key);
+                psbt.signInput(i, key);
                 psbt.validateSignaturesOfInput(i);
             }
         }
