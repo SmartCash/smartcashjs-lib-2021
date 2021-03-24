@@ -140,12 +140,12 @@ async function createAndSendRawTransaction({
 
         let key = smartCash.ECPair.fromWIF(decriptKey);
         let fromAddress = getAddressFromKeyPair(key);
-        let transaction = new smartCash.TransactionBuilder();
+        let psbt = new smartCash.Psbt();
         let change = unlockedBalance - amount - fee;
-        transaction.setLockTime(unspentList.blockHeight);
+        //transaction.setLockTime(unspentList.blockHeight);
 
         //SEND TO
-        transaction.addOutput(toAddress, parseFloat(smartCash.amount(amount.toString()).toString()));
+        psbt.addOutput({ address: toAddress, value: parseFloat(smartCash.amount(amount.toString()).toString()) });
 
         if (messageOpReturn && messageOpReturn.trim().length > 0) {
             let dataScript = null;
@@ -172,7 +172,7 @@ async function createAndSendRawTransaction({
                 dataScript = smartCash.script.compile([smartCash.opcodes.OP_RETURN, Buffer.from(messageOpReturn, 'utf8')]);
             }
 
-            transaction.addOutput(dataScript, 0);
+            psbt.addOutput(dataScript, 0);
         }
 
         if (locked) {
@@ -182,7 +182,7 @@ async function createAndSendRawTransaction({
 
         if (change >= fee) {
             //Change TO
-            transaction.addOutput(fromAddress, parseFloat(smartCash.amount(change.toString()).toString()));
+            psbt.addOutput({ address: fromAddress, value: parseFloat(smartCash.amount(change.toString()).toString()) });
         } else {
             fee = change;
         }
@@ -190,15 +190,16 @@ async function createAndSendRawTransaction({
         //Add unspent and sign them all
         if (!_.isUndefined(unspentList.utxos) && unspentList.utxos.length > 0) {
             unspentList.utxos.forEach((element) => {
-                transaction.addInput(element.txid, element.index);
+                psbt.addInput({ hash: element.txid, index: element.index });
             });
 
             for (let i = 0; i < unspentList.utxos.length; i += 1) {
-                transaction.sign(i, key);
+                psbt.sign(i, key);
+                psbt.validateSignaturesOfInput(i);
             }
         }
-
-        let signedTransaction = transaction.build().toHex();
+        psbt.finalizeAllInputs();
+        let signedTransaction = psbt.extractTransaction().toHex();
         let tx = await sendTransaction(signedTransaction, isChat);
 
         if (tx.status === 400) {
