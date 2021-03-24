@@ -189,10 +189,19 @@ async function createAndSendRawTransaction({
 
         //Add unspent and sign them all
         if (!_.isUndefined(unspentList.utxos) && unspentList.utxos.length > 0) {
-            unspentList.utxos.forEach(async (element) => {
-                const fullTxHex = await getTxId(element.txid);
+            const nonSegWitUnspents = await Promise.all(
+                unspentList.utxos.map(async (utxo) => {
+                    const fullTxHex = await getTxId(utxo.txid);
+                    return { hex: fullTxHex.hex, txid: utxo.txid, index: utxo.index };
+                })
+            );
 
-                psbt.addInput({ hash: element.txid, index: element.index, nonWitnessUtxo: Buffer.from(fullTxHex.hex, 'hex') });
+            nonSegWitUnspents.forEach((element) => {
+                psbt.addInput({
+                    hash: element.txid,
+                    index: element.index,
+                    nonWitnessUtxo: Buffer.from(element.hex, 'hex'),
+                });
             });
 
             for (let i = 0; i < unspentList.utxos.length; i += 1) {
