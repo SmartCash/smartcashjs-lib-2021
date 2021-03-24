@@ -762,19 +762,19 @@ async function getNodesUrl() {
     }
 }
 
-function getSupportedCurrencies({ URI = '' }) {
+function getSupportedCurrencies() {
     let options = {
         method: 'GET',
-        uri: URI || `https://api.coingecko.com/api/v3/simple/supported_vs_currencies`,
+        uri: `https://api.coingecko.com/api/v3/simple/supported_vs_currencies`,
         json: true,
     };
     return request.get(options);
 }
 
-function getCurrenciePrice({ vs_currencies = 'usd,btc', URI = '' }) {
+function getCurrenciePrice({ vs_currencies = 'usd,btc' }) {
     let options = {
         method: 'GET',
-        uri: URI || `https://api.coingecko.com/api/v3/simple/price?ids=smartcash&vs_currencies=${vs_currencies}`,
+        uri: `https://api.coingecko.com/api/v3/simple/price?ids=smartcash&vs_currencies=${vs_currencies}`,
         json: true,
     };
     return request.get(options);
