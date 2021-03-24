@@ -140,12 +140,12 @@ async function createAndSendRawTransaction({
 
         let key = smartCash.ECPair.fromWIF(decriptKey);
         let fromAddress = getAddressFromKeyPair(key);
-        let psbt = new smartCash.Psbt();
+        let transaction = new smartCash.TransactionBuilder();
         let change = unlockedBalance - amount - fee;
-        //transaction.setLockTime(unspentList.blockHeight);
+        transaction.setLockTime(unspentList.blockHeight);
 
         //SEND TO
-        psbt.addOutput({ address: toAddress, value: parseFloat(smartCash.amount(amount.toString()).toString()) });
+        transaction.addOutput(toAddress, parseFloat(smartCash.amount(amount.toString()).toString()));
 
         if (messageOpReturn && messageOpReturn.trim().length > 0) {
             let dataScript = null;
@@ -172,7 +172,7 @@ async function createAndSendRawTransaction({
                 dataScript = smartCash.script.compile([smartCash.opcodes.OP_RETURN, Buffer.from(messageOpReturn, 'utf8')]);
             }
 
-            psbt.addOutput(dataScript, 0);
+            transaction.addOutput(dataScript, 0);
         }
 
         if (locked) {
@@ -182,35 +182,23 @@ async function createAndSendRawTransaction({
 
         if (change >= fee) {
             //Change TO
-            psbt.addOutput({ address: fromAddress, value: parseFloat(smartCash.amount(change.toString()).toString()) });
+            transaction.addOutput(fromAddress, parseFloat(smartCash.amount(change.toString()).toString()));
         } else {
             fee = change;
         }
 
         //Add unspent and sign them all
         if (!_.isUndefined(unspentList.utxos) && unspentList.utxos.length > 0) {
-            const nonSegWitUnspents = await Promise.all(
-                unspentList.utxos.map(async (utxo) => {
-                    const fullTxHex = await getTxId(utxo.txid);
-                    return { hex: fullTxHex.hex, txid: utxo.txid, index: utxo.index };
-                })
-            );
-
-            nonSegWitUnspents.forEach((element) => {
-                psbt.addInput({
-                    hash: element.txid,
-                    index: element.index,
-                    nonWitnessUtxo: Buffer.from(element.hex, 'hex'),
-                });
+            unspentList.utxos.forEach((element) => {
+                transaction.addInput(element.txid, element.index);
             });
 
             for (let i = 0; i < unspentList.utxos.length; i += 1) {
-                psbt.signInput(i, key);
-                psbt.validateSignaturesOfInput(i);
+                transaction.sign(i, key);
             }
         }
-        psbt.finalizeAllInputs();
-        let signedTransaction = psbt.extractTransaction().toHex();
+
+        let signedTransaction = transaction.build().toHex();
         let tx = await sendTransaction(signedTransaction, isChat);
 
         if (tx.status === 400) {
