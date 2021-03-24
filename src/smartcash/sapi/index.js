@@ -14,7 +14,7 @@ const MIN_FEE = 0.001;
 const MIN_AMOUNT_TO_SEND = 0.001;
 
 function between(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+    return Math.floor(Math.random() * (max - min) + min);
 }
 
 async function getEnabledNodes() {
