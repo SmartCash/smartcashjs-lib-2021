@@ -142,8 +142,9 @@ async function createAndSendRawTransaction({
         let fromAddress = getAddressFromKeyPair(key);
         let transaction = new smartCash.TransactionBuilder();
         let change = unlockedBalance - amount - fee;
-        transaction.setVersion(2);
-        transaction.setLockTime(0);
+        transaction.setLockTime(unspentList.blockHeight);
+        //transaction.setVersion(2);
+        //transaction.setLockTime(0);
 
         //SEND TO
         transaction.addOutput(toAddress, parseFloat(smartCash.amount(amount.toString()).toString()));
