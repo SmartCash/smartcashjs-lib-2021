@@ -255,7 +255,7 @@ class Transaction {
     const buffer = Buffer.allocUnsafe(txTmp.byteLength(false) + 4);
     buffer.writeInt32LE(hashType, buffer.length - 4);
     txTmp.__toBuffer(buffer, 0, false);
-    return bcrypto.hash256(buffer);
+    return bcrypto.sha256(buffer);
   }
   hashForWitnessV0(inIndex, prevOutScript, value, hashType) {
     typeforce(
@@ -274,7 +274,7 @@ class Transaction {
         bufferWriter.writeSlice(txIn.hash);
         bufferWriter.writeUInt32(txIn.index);
       });
-      hashPrevouts = bcrypto.hash256(tbuffer);
+      hashPrevouts = bcrypto.sha256(tbuffer);
     }
     if (
       !(hashType & Transaction.SIGHASH_ANYONECANPAY) &&
@@ -286,7 +286,7 @@ class Transaction {
       this.ins.forEach(txIn => {
         bufferWriter.writeUInt32(txIn.sequence);
       });
-      hashSequence = bcrypto.hash256(tbuffer);
+      hashSequence = bcrypto.sha256(tbuffer);
     }
     if (
       (hashType & 0x1f) !== Transaction.SIGHASH_SINGLE &&
@@ -301,7 +301,7 @@ class Transaction {
         bufferWriter.writeUInt64(out.value);
         bufferWriter.writeVarSlice(out.script);
       });
-      hashOutputs = bcrypto.hash256(tbuffer);
+      hashOutputs = bcrypto.sha256(tbuffer);
     } else if (
       (hashType & 0x1f) === Transaction.SIGHASH_SINGLE &&
       inIndex < this.outs.length
@@ -311,7 +311,7 @@ class Transaction {
       bufferWriter = new bufferutils_1.BufferWriter(tbuffer, 0);
       bufferWriter.writeUInt64(output.value);
       bufferWriter.writeVarSlice(output.script);
-      hashOutputs = bcrypto.hash256(tbuffer);
+      hashOutputs = bcrypto.sha256(tbuffer);
     }
     tbuffer = Buffer.allocUnsafe(156 + varSliceSize(prevOutScript));
     bufferWriter = new bufferutils_1.BufferWriter(tbuffer, 0);
@@ -327,12 +327,12 @@ class Transaction {
     bufferWriter.writeSlice(hashOutputs);
     bufferWriter.writeUInt32(this.locktime);
     bufferWriter.writeUInt32(hashType);
-    return bcrypto.hash256(tbuffer);
+    return bcrypto.sha256(tbuffer);
   }
   getHash(forWitness) {
     // wtxid for coinbase is always 32 bytes of 0x00
     if (forWitness && this.isCoinbase()) return Buffer.alloc(32, 0);
-    return bcrypto.hash256(this.__toBuffer(undefined, undefined, forWitness));
+    return bcrypto.sha256(this.__toBuffer(undefined, undefined, forWitness));
   }
   getId() {
     // transaction hash's are displayed in reverse order

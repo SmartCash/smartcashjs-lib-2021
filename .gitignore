@@ -5,3 +5,10 @@ npm-debug.log
 test/*.js
 test/integration/*.js
 !test/ts-node-register.js
+.idea/.gitignore
+.idea/modules.xml
+.idea/smartcashjs-lib-2021.iml
+.idea/vcs.xml
+.idea/codeStyles/codeStyleConfig.xml
+.idea/codeStyles/Project.xml
+.idea/inspectionProfiles/Project_Default.xml
