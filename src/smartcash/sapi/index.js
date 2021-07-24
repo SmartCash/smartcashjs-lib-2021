@@ -142,7 +142,7 @@ async function createAndSendRawTransaction({
         let fromAddress = getAddressFromKeyPair(key);
         let transaction = new smartCash.TransactionBuilder();
         let change = unlockedBalance - amount - fee;
-        transaction.setLockTime(unspentList.blockHeight);
+        //transaction.setLockTime(unspentList.blockHeight);
         //transaction.setVersion(2);
         //transaction.setLockTime(0);
 
