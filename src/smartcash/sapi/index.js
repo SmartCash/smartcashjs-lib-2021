@@ -5,11 +5,13 @@ const { sumFloats } = require('./../satoshi/math');
 
 const cryptoAES = require('crypto-js');
 const cryptoRSA = require('crypto');
+
 const smartCash = require('./../../index');
 const request = require('request-promise');
 const _ = require('lodash');
-
+const bip65 = require('bip65');
 const { getAddressFromKeyPair, getAddressFromWIF } = require('./../keypair');
+const { fromBase58Check } = require('../../address');
 
 const LOCKED = 'pubkeyhashlocked';
 //const OP_RETURN_DEFAULT = 'Sent from SmartHub.';
@@ -52,7 +54,7 @@ async function createAndSendRawTransaction({
     isChat,
     rsaKeyPairFromSender,
     rsaKeyPairFromRecipient,
-    locked,
+    locked = false,
 }) {
     if (!toAddress) {
         return {
@@ -134,20 +136,29 @@ async function createAndSendRawTransaction({
     try {
         const decryptedWallet = cryptoAES.enc.Utf8.stringify(cryptoAES.AES.decrypt(privateKey, password));
         let decriptKey;
-
         if (!decryptedWallet) decriptKey = privateKey;
         else decriptKey = decryptedWallet;
 
-        let key = smartCash.ECPair.fromWIF(decriptKey);
+        let key = smartCash.ECPair.fromWIF(privateKey);
         let fromAddress = getAddressFromKeyPair(key);
         let transaction = new smartCash.TransactionBuilder();
         let change = unlockedBalance - amount - fee;
-        //transaction.setLockTime(unspentList.blockHeight);
-        //transaction.setVersion(2);
-        //transaction.setLockTime(0);
 
-        //SEND TO
-        transaction.addOutput(toAddress, parseFloat(smartCash.amount(amount.toString()).toString()));
+        if (locked) {
+            console.log(toAddress);
+
+            // Add one day
+            const utc = Math.floor(new Date().getTime() / 1000.0 + 60 * 60 * 24);
+            const lockTime = bip65.encode({ utc: utc });
+            transaction.setLockTime(lockTime);
+            transaction.addOutput(
+                cltvBasicByAddressTemplate(toAddress, lockTime),
+                parseFloat(smartCash.amount(amount.toString()).toString())
+            );
+        } else {
+            //SEND TO
+            transaction.addOutput(toAddress, parseFloat(smartCash.amount(amount.toString()).toString()));
+        }
 
         if (messageOpReturn && messageOpReturn.trim().length > 0) {
             let dataScript = null;
@@ -175,11 +186,6 @@ async function createAndSendRawTransaction({
             }
 
             transaction.addOutput(dataScript, 0);
-        }
-
-        if (locked) {
-            //const lockTime = bip65.encode({ utc: utcNow() - 3600 * 3 });
-            // const redeemScript = cltvBasicTemplate(smartCash.ECPair.fromWIF(privateKey), 5);
         }
 
         if (change >= fee) {
@@ -225,19 +231,20 @@ async function createAndSendRawTransaction({
     }
 }
 
-function cltvBasicTemplate(ecPair, lockTime) {
-    return smartCash.script.fromASM(
+function cltvBasicByAddressTemplate(address, lockTime) {
+    let asm = smartCash.script.fromASM(
         `${smartCash.script.number.encode(lockTime).toString('hex')}
         OP_CHECKLOCKTIMEVERIFY
         OP_DROP
         OP_DUP
         OP_HASH160
-        ${smartCash.crypto.hash160(ecPair.publicKey).toString('hex')}
+        ${fromBase58Check(address).hash.toString('hex')}
         OP_EQUALVERIFY
         OP_CHECKSIG`
             .trim()
             .replace(/\s+/g, ' ')
     );
+    return asm;
 }
 
 function createNewWalletKeyPair() {
